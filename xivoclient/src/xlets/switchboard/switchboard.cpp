@@ -1,5 +1,5 @@
 /* XiVO Client
- * Copyright (C) 2012-2015 Avencall
+ * Copyright (C) 2012-2016 Avencall
  *
  * This file is part of XiVO Client.
  *
@@ -270,8 +270,15 @@ void Switchboard::keyPressEvent(QKeyEvent *event)
 
 void Switchboard::focusOnIncomingCalls()
 {
-    this->ui.waitingCallsView->clearSelection();
-    this->ui.incomingCallsView->selectFirstRow();
+    if (!this->isSearching()) {
+        this->ui.waitingCallsView->clearSelection();
+        this->ui.incomingCallsView->selectFirstRow();
+    }
+}
+
+bool Switchboard::isSearching() const
+{
+    return this->m_current_call->isSearching();
 }
 
 bool Switchboard::hasIncomingCalls() {

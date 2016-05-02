@@ -1,5 +1,5 @@
 /* XiVO Client
- * Copyright (C) 2012-2014 Avencall
+ * Copyright (C) 2012-2016 Avencall
  *
  * This file is part of XiVO Client.
  *
@@ -83,6 +83,7 @@ class Switchboard : public XLet, public IPBXListener
         void onPhoneStatusChange();
         bool isSwitchboardQueue(const QString &queue_id) const;
         bool isSwitchboardHoldQueue(const QString &queue_id) const;
+        bool isSearching() const;
 
         Ui::SwitchboardPanel ui;
         CurrentCall *m_current_call;

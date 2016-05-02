@@ -1,5 +1,5 @@
 /* XiVO Client
- * Copyright (C) 2012-2014 Avencall
+ * Copyright (C) 2012-2016 Avencall
  *
  * This file is part of XiVO Client.
  *
@@ -63,6 +63,7 @@ class CurrentCall: public QObject, public IPBXListener
         void onPhoneAvailable();
         void onPhoneRinging(bool has_incoming);
         void onPhoneInUse();
+        bool isSearching() const;
     signals:
         void requestedAnswer();
     public slots:
@@ -122,6 +123,7 @@ class CurrentCall: public QObject, public IPBXListener
         static QKeySequence hangup_key;
 
         RequestedAction m_requested_action;
+        bool m_searching;
 };
 
 #endif /* __CURRENT_CALL_H__ */

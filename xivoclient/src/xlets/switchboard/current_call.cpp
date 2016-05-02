@@ -1,5 +1,5 @@
 /* XiVO Client
- * Copyright (C) 2012-2014 Avencall
+ * Copyright (C) 2012-2016 Avencall
  *
  * This file is part of XiVO Client.
  *
@@ -51,7 +51,8 @@ CurrentCall::CurrentCall(QObject *parent)
       m_call_label(tr("Call")),
       m_complete_transfer_label(tr("Complete T")),
       m_hangup_label(tr("Hangup")),
-      m_cancel_label(tr("Cancel"))
+      m_cancel_label(tr("Cancel")),
+      m_searching(false)
 {
     this->registerListener("current_call_attended_transfer_answered");
 
@@ -63,6 +64,11 @@ CurrentCall::CurrentCall(QObject *parent)
 
 CurrentCall::~CurrentCall()
 {
+}
+
+bool CurrentCall::isSearching() const
+{
+    return m_searching;
 }
 
 void CurrentCall::setParentWidget(QWidget *parent)
@@ -173,6 +179,7 @@ void CurrentCall::dialSuccess()
 
 void CurrentCall::numberSelected(const QString &number)
 {
+    m_searching = false;
     switch(m_requested_action) {
     case ATTENDED_TRANSFER:
         b_engine->sendJsonCommand(MessageFactory::attendedTransfer(number));
@@ -194,11 +201,13 @@ void CurrentCall::numberSelected(const QString &number)
 
 void CurrentCall::noNumberSelected()
 {
+    m_searching = false;
     this->answeringMode();
 }
 
 void CurrentCall::call()
 {
+    m_searching = true;
     m_requested_action = CALL;
     signal_relayer->relayNumberSelectionRequested();
     this->m_current_call_widget->btn_call->setShortcut(QString());
@@ -218,6 +227,7 @@ void CurrentCall::hold()
 
 void CurrentCall::attendedTransfer()
 {
+    m_searching = true;
     m_requested_action = ATTENDED_TRANSFER;
     signal_relayer->relayNumberSelectionRequested();
     this->m_current_call_widget->btn_attended_transfer->setShortcut(QString());
@@ -225,6 +235,7 @@ void CurrentCall::attendedTransfer()
 
 void CurrentCall::directTransfer()
 {
+    m_searching = true;
     m_requested_action = DIRECT_TRANSFER;
     signal_relayer->relayNumberSelectionRequested();
     this->m_current_call_widget->btn_direct_transfer->setShortcut(QString());
